@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pomodoro</title>
+    </head>
+    <body>
+        <div id="content">
+            <div id="countdown-ctnr">
+                <input type="text" id="countdown" value="30:00" placeholder="MM:SS"></input>
+                <button id="toggle" type="button" onclick="start_counting()">START</button>
+            </div>
+        </div>
+
+        <style>
+            * {
+                font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                flex-direction: row;
+                width: 100vw;
+                height: 100vh;
+                background-color: #393E46;
+            }
+
+            #content {
+                display: flex;
+                flex-direction: column;
+                width: fit-content;
+                height: fit-content;
+                align-self: center;
+            }
+
+            #countdown-ctnr {
+                display: flex;
+                flex-direction: column;
+                color: #DFD0B8;
+                width: 30vw;
+                height: max-content;
+                text-align: center;
+                background-color: #222831;
+                border-radius: 20px;
+                border: 2px solid #948979;
+
+                #countdown {
+                    text-align: center;
+                    align-self: center;
+                    width: 30vw;
+                    background: none;
+                    border: none;
+                    margin: 20px 20px 0 20px;
+                    padding: 10px 10px 30px 10px;
+                    font-size: 120px;
+                    outline: none;
+                    color: #DFD0B8;
+                    font-weight: bold;
+                }
+                #toggle {
+                    align-self: center;
+                    width: fit-content;
+                    background-color: transparent;
+                    border: solid 2px #DFD0B8;
+                    color: #DFD0B8;
+                    font-weight: bold;
+                    margin: 0 0 20px 0;
+                    border-radius: 10px;
+                    padding: 10px 40px;
+                    font-size: 20px;
+                }
+                #toggle:hover {
+                    background-color: #DFD0B8;
+                    color: #222831;
+                    cursor: pointer;
+                }
+            }
+        </style>
+        <script>
+            // let notifs = false;
+            // if (Notification.permission != "granted") {
+            //     alert("Please allow notifications for when the timer is done :)");
+            //     Notification.requestPermission().then((res) => {
+            //         if (res == "granted") { notifs = true; }
+            //     })
+            // }
+            const countdown = document.getElementById("countdown");
+            const btn = document.getElementById("toggle");
+            let remaining = null; // seconds
+            let interval = null;
+            function convert(n) {
+                n = String(n);
+                if (n.length == 1) { n = "0" + n; }
+                return n;
+            }
+            const parse_time = () => {
+                const time = countdown.value.split(":");
+                if (time.length != 2) {
+                    alert("Please enter a time in MM:SS format!");
+                    return -1;
+                }
+                return 60 * parseInt(time[0]) + parseInt(time[1]);
+            }
+            const start_counting = () => {
+                remaining = parse_time();
+                if (remaining <= 0) { return; }
+                btn.innerHTML = "PAUSE";
+                btn.onclick = pause;
+                interval = setInterval(() => {
+                    remaining--;
+                    let mins = Math.floor(remaining/60);
+                    let secs = remaining - mins * 60;
+                    countdown.value = `${convert(mins)}:${convert(secs)}`;
+                    if (remaining == 0) {
+                        // if (notifs) {
+                        //     let n = new Notification("Pomodoro", {body: "Ding ding ding! Time's up!"});
+                        //     setTimeout(n.close(), 2000);
+                        // }
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            };
+            const pause = () => {
+                clearInterval(interval);
+                btn.innerHTML = "START";
+                btn.onclick = start_counting;
+            }
+            countdown.onfocus = pause;
+        </script>
+    </body>
+</html>
