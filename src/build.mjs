@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { minify } from "terser";
 
 const LIMIT = 3072;
-const src = readFileSync("pomodoro/index.html", "utf8");
+const src = readFileSync("src/index.html", "utf8");
 
 // Squeeze whitespace in shaders written as glsl`...` (terser leaves strings alone).
 function glsl(code) {
