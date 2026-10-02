@@ -1,49 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name=viewport content="width=device-width, initial-scale=1">
         <title>Pomodoro</title>
     </head>
     <body>
-        <template id="tsk-tmplt">
-            <div class="task">
-                <p class="tsk-title"></p>
-                <input class="tsk-todo" name="txt" type="text" placeholder="What are you working on?">
+        <template id=tmp>
+            <div class=task>
+                <p class=ht></p>
+                <input class=d placeholder="What are you working on?">
             </div>
         </template>
-        <button type="button" id="toggle-help" onclick="toggle_help()">?</button>
-        <div id="content">
-            <div id="countdown-ctnr">
-                <input type="text" id="countdown" value="30:00" placeholder="MM:SS"></input>
-                <button id="toggle" type="button" onclick="start_counting()">START</button>
+        <button id=t-h onclick="th()">?</button>
+        <div id=m>
+            <div id=c-ctnr>
+                <input id=c value="30:00" placeholder="MM:SS">
+                <button id=o onclick="strt()">START</button>
             </div>
-            <div id="tsks-ctnr"></div>
+            <div id=tc></div>
         </div>
-        <div id="help" class="hidden">
-            <h1>Pomodoro 101</h1>
-            <p>Set the timer value by clicking on the timer and entering the time in a MM:SS format. Add up to five tasks by simply clicking and writing</p>
-            <p>Thanks for using this lil' pomodoro by <a target="_blank" href="https://www.github.com/agilfor">agilfor</a>!</p>
+        <div id=h class=hid>
+            <h1>pomodoro</h1>
+            <p>enter time in a MM:SS; type l in directly</p>
+            <p>made w &lt;3 by <a target="_blank" href="https://www.github.com/agilfor">agilfor</a></p>
         </div>
 
         <style>
             * {
                 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                color: #DFD0B8;
             }
             html { overflow: hidden; }
 
             @media screen and (max-width: 500px) {
-                #tsks-ctnr {
+                #tc, #c-ctnr {
                     width: 85vw !important;
                 }
-                #countdown-ctnr {
-                    width: 85vw !important;
-                    #countdown {
-                        font-size: 90px !important;
-                    }
-                    #toggle {
-                        font-size: 15px !important;
-                    }
+                #c {
+                    font-size: 90px !important;
+                }
+                #o {
+                    font-size: 15px !important;
                 }
             }
 
@@ -52,13 +49,12 @@
                 margin: 0;
                 padding: 0;
                 justify-content: center;
-                flex-direction: row;
                 width: 100vw;
                 height: 100vh;
-                background-color: #393E46;
+                background: #393E46;
             }
 
-            #content {
+            #m {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -67,20 +63,18 @@
                 align-self: center;
             }
 
-            #countdown-ctnr {
+            #c-ctnr {
                 display: flex;
                 flex-direction: column;
-                color: #DFD0B8;
                 width: 30vw;
                 min-width: 450px;
                 height: max-content;
                 text-align: center;
-                background-color: #222831;
+                background: #222831;
                 border-radius: 20px;
                 border: 2px solid #948979;
                 margin: 20px 0;
-                transition: all ease 0.2s;
-                #countdown {
+                #c {
                     text-align: center;
                     align-self: center;
                     width: 100%;
@@ -90,33 +84,18 @@
                     padding: 10px 10px 30px 10px;
                     font-size: 120px;
                     outline: none;
-                    color: #DFD0B8;
                     font-weight: bold;
                 }
-                #toggle {
+                #o {
                     align-self: center;
-                    width: fit-content;
-                    background-color: transparent;
-                    border: solid 2px #DFD0B8;
-                    color: #DFD0B8;
-                    font-weight: bold;
                     margin: 0 0 20px 0;
-                    border-radius: 10px;
                     padding: 10px 40px;
+                    border-radius: 10px;
                     font-size: 20px;
-                }
-                #toggle:hover {
-                    background-color: #DFD0B8;
-                    color: #222831;
-                    cursor: pointer;
-                }
-                #toggle:active {
-                    background-color: #948979;
-                    border-color: #948979;
                 }
             }
 
-            #tsks-ctnr {
+            #tc {
                 width: 30vw;
                 min-width: 450px;
                 overflow-y: scroll;
@@ -125,7 +104,6 @@
                     border: solid 2px #948979;
                     border-radius: 10px;
                     background: #222831;
-                    color: #DFD0B8;
                     margin: 0 0 10px;
                     p {
                         width: 100%;
@@ -140,7 +118,6 @@
                         background: none;
                         border: none;
                         width: 100%;
-                        color: inherit;
                         font-size: 15px;
                         width: calc(100% - 20px);
                     }
@@ -150,34 +127,33 @@
                 }
             }
 
-            #toggle-help {
-                position: fixed;
-                top: 10px; right: 10px;
-                background-color: transparent;
+            button {
+                background: transparent;
                 border: solid 2px #DFD0B8;
-                border-radius: 5px;
-                color: #DFD0B8;
                 font-weight: bold;
             }
-            #toggle-help:hover {
-                background-color: #DFD0B8;
+
+            button:hover {
+                background: #DFD0B8;
                 color: #222831;
                 cursor: pointer;
             }
-            #toggle-help:active {
-                background-color: #948979;
-                border-color: #948979;
+            button:active {
+                background: #948979;
+                border: #948979;
+            }
+
+            #t-h {
+                position: fixed;
+                top: 10px; right: 10px;
+                border-radius: 5px;
             }
             
-            #help {
-                opacity: 0.95;
+            #h {
                 position: fixed;
-                top: 10px;
+                top: 0;
                 text-align: center;
                 align-content: center;
-                align-items: center;
-                color: #DFD0B8;
-                height: min-content;
                 width: 30vw;
                 min-width: 450px;
                 background: #222831;
@@ -191,134 +167,81 @@
                     margin: 0;
                     font-size: 30px;
                 }
-                p {
-                    padding: 0 20px;
-                }
-                a {
-                    color: #948979;
-                }
-                a:hover {
-                    color: #DFD0B8;
-                }
+                p { padding: 0 20px; }
+                a { color: #948979;}
+                a:hover { color: #DFD0B8; }
             }
-            .hidden {
-                position: fixed;
+            .hid {
                 top: -200px !important;
             }
         </style>
         <script>
-            const help = document.getElementById("help");
-            const toggle_help = () => {
-                if (help.classList.contains("hidden")) {
-                    help.classList.remove("hidden");
-                } else {
-                    help.classList.add("hidden");
-                }
-            }
-            // let notifs = false;
-            // if (Notification.permission != "granted") {
-            //     alert("Please allow notifications for when the timer is done :)");
-            //     Notification.requestPermission().then((res) => {
-            //         if (res == "granted") { notifs = true; }
-            //     })
-            // }
-            const countdown = document.getElementById("countdown");
-            const btn = document.getElementById("toggle");
-            let remaining = null; // seconds
-            let interval = null;
-            function convert(n) {
+            const d = document,
+                h = d.getElementById("h"),
+                th = () => h.classList.toggle("hid"),
+                c = d.getElementById("c"),
+                btn = d.getElementById("o"),
+                tmp = d.getElementById("tmp"),
+                x = d.getElementById("tc");
+            let s, clk;
+            const convert = (n) => {
                 n = String(n);
                 if (n.length == 1) { n = "0" + n; }
                 return n;
-            }
-            const parse_time = () => {
-                const time = countdown.value.split(":");
+            },
+            pt = () => {
+                const time = c.value.split(":");
                 if (time.length != 2) {
                     alert("Please enter a time in MM:SS format!");
                     return -1;
                 }
                 return 60 * parseInt(time[0]) + parseInt(time[1]);
-            }
-            const start_counting = () => {
-                remaining = parse_time();
-                if (remaining <= 0) { return; }
+            },
+            strt = () => {
+                s = pt();
+                if (s <= 0) { return; }
                 btn.innerHTML = "PAUSE";
-                btn.onclick = pause;
-                interval = setInterval(() => {
-                    remaining--;
-                    let mins = Math.floor(remaining/60);
-                    let secs = remaining - mins * 60;
-                    countdown.value = `${convert(mins)}:${convert(secs)}`;
-                    if (remaining == 0) {
-                        // if (notifs) {
-                        //     let n = new Notification("Pomodoro", {body: "Ding ding ding! Time's up!"});
-                        //     setTimeout(n.close(), 2000);
-                        // }
-                        clearInterval(interval);
+                btn.onclick = p;
+                clk = setInterval(() => {
+                    s--;
+                    let a = Math.floor(s/60), b = s - a * 60;
+                    c.value = `${convert(a)}:${convert(b)}`;
+                    if (s == 0) {
+                        clearInterval(clk);
                     }
                 }, 1000);
-            };
-            const pause = () => {
-                clearInterval(interval);
+            },
+            p = () => {
+                clearInterval(clk);
                 btn.innerHTML = "START";
-                btn.onclick = start_counting;
-            }
-            countdown.onfocus = pause;
-
-            const task_tmplt = document.getElementById("tsk-tmplt");
-            const tasks_ctnr = document.getElementById("tsks-ctnr");
-            let tasks = [];
-            const focused_task = (i) => {
-                const tsk = document.getElementById(`tsk-${i}`);
-                tsk.classList.remove("empty");
+                btn.onclick = strt;
+            },
+            nt = () => {
+                let a = tmp.content.cloneNode(true), b = a.querySelector("div.task"), n = x.childElementCount+1;
+                b.querySelector("p.ht").innerHTML = `Task #${n}`;
+                b.classList.add("empty");
+                b.id = `tsk-${n}`;
+                x.appendChild(a);
             };
-            const new_task = () => {
-                let new_tsk = task_tmplt.content.cloneNode(true);
-                const tsk = new_tsk.querySelector("div.task");
-                const tsk_num = tasks.length + 1;
-                tsk.querySelector("p.tsk-title").innerHTML = `Task #${tsk_num}`;
-                tsk.classList.add("empty");
-                tsk.id = `tsk-${tsk_num}`;
-                tasks_ctnr.appendChild(new_tsk);
-                tasks.push("");
-                tsk.onclick = () => focused_task(tsk_num);
-            };
-            const update_tasks = () => {
-                const tsks = tasks_ctnr.querySelectorAll(".tsk-todo");
-                for (let i = 0; i < tsks.length; i++) {
-                    tasks[i] = tsks[i].value;
+            c.onfocus = p;
+            nt();
+            d.addEventListener("click", (e) => {
+                let t = e.target.closest(".task");
+                if (t) t.classList.remove("empty");
+                else {
+                    let a=[...x.children];
+                    a.forEach((t, i) => {
+                        if (!t.querySelector(".d").value && i<a.length-1) t.remove();
+                    })
+                    a=[...x.children];
+                    a.forEach((t, i)=> {
+                        t.id=`tsk-${i+1}`;
+                        t.querySelector(".ht").innerHTML = `Task #${i+1}`;
+                    })
+                    if (a.length<5 && a.every(t=>t.querySelector(".d").value))nt();
                 }
-            };
-            const regenerate_tasks_list = () => {
-                while (tasks.includes("")) {
-                    const i = tasks.indexOf("");
-                    tasks.splice(i, 1);
-                    tasks_ctnr.removeChild(tasks_ctnr.children[i]);
-                }
-                const tsks = tasks_ctnr.querySelectorAll(".task");
-                for (let i = 0; i < tsks.length; i++) {
-                    tsks[i].querySelector("p.tsk-title").innerHTML = `Task #${i+1}`;
-                    tsks[i].id = `tsk-${i+1}`;
-                    tsks[i].onclick = () => focused_task(i+1);
-                }
-            };
-            new_task();
-            document.addEventListener("click", (event) => {
-                if (!event.target.closest(".task")) {
-                    update_tasks();
-                    const tsks = document.querySelectorAll(".task");
-                    let need_regen = false;
-                    for (let i = 0; i < tsks.length; i++) {
-                        const input = tsks[i].querySelector(".tsk-todo");
-                        if (input.value === "" && i == (tsks.length - 1)) tsks[i].classList.add("empty");
-                        else if (input.value === "") need_regen = true;
-                        else tasks[i] = input.value;
-                    }
-                    if (need_regen) regenerate_tasks_list();
-                    if (!tasks.includes("") && tasks.length < 5) new_task();
-                }
-                if (!event.target.closest("#help") && !help.classList.contains("hidden") && !event.target.closest("#toggle-help")) {
-                    help.classList.add("hidden");
+                if (!e.target.closest("#h") && !h.classList.contains("hid") && !e.target.closest("#t-h")) {
+                    h.classList.add("hid");
                 }
             });
         </script>
