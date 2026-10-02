@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Pomodoro</title>
     </head>
     <body>
@@ -24,6 +25,21 @@
                 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             html { overflow: hidden; }
+
+            @media screen and (max-width: 500px) {
+                #tsks-ctnr {
+                    width: 85vw !important;
+                }
+                #countdown-ctnr {
+                    width: 85vw !important;
+                    #countdown {
+                        font-size: 90px !important;
+                    }
+                    #toggle {
+                        font-size: 15px !important;
+                    }
+                }
+            }
 
             body {
                 display: flex;
@@ -58,7 +74,7 @@
                 #countdown {
                     text-align: center;
                     align-self: center;
-                    width: 30vw;
+                    width: 100%;
                     background: none;
                     border: none;
                     margin: 20px 20px 0 20px;
