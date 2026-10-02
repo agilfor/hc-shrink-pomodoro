@@ -5,17 +5,25 @@
         <title>Pomodoro</title>
     </head>
     <body>
+        <template id="tsk-tmplt">
+            <div class="task">
+                <p class="tsk-title"></p>
+                <input class="tsk-todo" name="txt" type="text" placeholder="What are you working on?">
+            </div>
+        </template>
         <div id="content">
             <div id="countdown-ctnr">
                 <input type="text" id="countdown" value="30:00" placeholder="MM:SS"></input>
                 <button id="toggle" type="button" onclick="start_counting()">START</button>
             </div>
+            <div id="tsks-ctnr"></div>
         </div>
 
         <style>
             * {
                 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
+            html { overflow: hidden; }
 
             body {
                 display: flex;
@@ -29,8 +37,9 @@
             #content {
                 display: flex;
                 flex-direction: column;
+                justify-content: center;
                 width: fit-content;
-                height: fit-content;
+                height: 100vh;
                 align-self: center;
             }
 
@@ -44,7 +53,8 @@
                 background-color: #222831;
                 border-radius: 20px;
                 border: 2px solid #948979;
-
+                margin: 20px 0;
+                transition: all ease 0.2s;
                 #countdown {
                     text-align: center;
                     align-self: center;
@@ -75,7 +85,43 @@
                     color: #222831;
                     cursor: pointer;
                 }
+                #toggle:active {
+                    background-color: #948979;
+                    border-color: #948979;
+                }
             }
+
+            #tsks-ctnr {
+                width: 30vw;
+                .task {
+                    border: solid 2px #948979;
+                    border-radius: 10px;
+                    background: #222831;
+                    color: #DFD0B8;
+                    margin: 0 0 10px;
+                    p {
+                        width: 100%;
+                        text-align: center;
+                        margin: 0;
+                        padding: 5px 0 0 0;
+                    }
+                    input {
+                        text-align: center;
+                        outline: none;
+                        padding: 10px;
+                        background: none;
+                        border: none;
+                        width: 100%;
+                        color: inherit;
+                        font-size: 15px;
+                        width: calc(100% - 20px);
+                    }
+                }
+                .empty {
+                    opacity: 0.75;
+                }
+            }
+
         </style>
         <script>
             // let notifs = false;
@@ -127,6 +173,60 @@
                 btn.onclick = start_counting;
             }
             countdown.onfocus = pause;
+
+            const task_tmplt = document.getElementById("tsk-tmplt");
+            const tasks_ctnr = document.getElementById("tsks-ctnr");
+            let tasks = [];
+            const focused_task = (i) => {
+                const tsk = document.getElementById(`tsk-${i}`);
+                tsk.classList.remove("empty");
+            };
+            const new_task = () => {
+                let new_tsk = task_tmplt.content.cloneNode(true);
+                const tsk = new_tsk.querySelector("div.task");
+                const tsk_num = tasks.length + 1;
+                tsk.querySelector("p.tsk-title").innerHTML = `Task #${tsk_num}`;
+                tsk.classList.add("empty");
+                tsk.id = `tsk-${tsk_num}`;
+                tasks_ctnr.appendChild(new_tsk);
+                tasks.push("");
+                tsk.onclick = () => focused_task(tsk_num);
+            };
+            const update_tasks = () => {
+                const tsks = tasks_ctnr.querySelectorAll(".tsk-todo");
+                for (let i = 0; i < tsks.length; i++) {
+                    tasks[i] = tsks[i].value;
+                }
+            };
+            const regenerate_tasks_list = () => {
+                while (tasks.includes("")) {
+                    const i = tasks.indexOf("");
+                    tasks.splice(i, 1);
+                    tasks_ctnr.removeChild(tasks_ctnr.children[i]);
+                }
+                const tsks = tasks_ctnr.querySelectorAll(".task");
+                for (let i = 0; i < tsks.length; i++) {
+                    tsks[i].querySelector("p.tsk-title").innerHTML = `Task #${i+1}`;
+                    tsks[i].id = `tsk-${i+1}`;
+                    tsks[i].onclick = () => focused_task(i+1);
+                }
+            };
+            new_task();
+            document.addEventListener("click", (event) => {
+                if (!event.target.closest(".task")) {
+                    update_tasks();
+                    const tsks = document.querySelectorAll(".task");
+                    let need_regen = false;
+                    for (let i = 0; i < tsks.length; i++) {
+                        const input = tsks[i].querySelector(".tsk-todo");
+                        if (input.value === "" && i == (tsks.length - 1)) tsks[i].classList.add("empty");
+                        else if (input.value === "") need_regen = true;
+                        else tasks[i] = input.value;
+                    }
+                    if (need_regen) regenerate_tasks_list();
+                    if (!tasks.includes("") && tasks.length < 5) new_task();
+                }
+            });
         </script>
     </body>
 </html>
