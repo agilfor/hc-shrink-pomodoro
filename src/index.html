@@ -6,11 +6,11 @@
         <input class=d placeholder="What are you working on?">
     </div>
 </template>
-<button id=t-h onclick="th()">?</button>
+<button id=t-h>?</button>
 <div id=m>
     <div id=c-ctnr>
         <input id=c value="30:00" placeholder="MM:SS">
-        <button id=o onclick="strt()">START</button>
+        <button id=o>START</button>
     </div>
     <div id=tc></div>
 </div>
@@ -63,7 +63,7 @@
     #c-ctnr {
         flex-direction: column;
         height: max-content;
-        margin: 20px 0;
+        margin: 10px 0;
 
         #c {
             align-self: center;
@@ -90,7 +90,7 @@
         overflow-y: scroll;
 
         .k {
-            margin: 0 0 10px;
+            margin: 10px 0;
 
             p {
                 width: 100%;
@@ -139,7 +139,7 @@
         top: 0;
         align-content: center;
         margin: 10px;
-        padding: 10px 20px;
+        padding: 10px;
         transition: top 0.5s ease;
         box-shadow: 0 0 20px 10px #393E46;
 
@@ -161,19 +161,20 @@
 <script>
     const d = document,
         h = d.getElementById("h").classList,
-        th = () => h.toggle("hid"),
         c = d.getElementById("c"),
         btn = d.getElementById("o"),
         tmp = d.getElementById("tmp"),
         x = d.getElementById("tc"),
-        cl = clearInterval;
+        cl = clearInterval,
+        pi = parseInt;
     let s, clk;
+    d.getElementById("t-h").onclick = () => h.toggle("hid");
     const pt = () => {
             const a = c.value.split(":");
             if (a.length != 2) {
                 return alert("Enter time as MM:SS");
             }
-            return 60 * parseInt(a[0]) + parseInt(a[1]);;
+            return 60 * pi(a[0]) + pi(a[1]);
         },
         strt = () => {
             s = pt();
@@ -197,12 +198,13 @@
         nt = () => {
             let a = tmp.content.cloneNode(true), b = a.querySelector(".k"), n = x.childElementCount + 1;
             b.querySelector(".ht").innerHTML = `Task #${n}`;
-            b.id = `tsk-${n}`;
+            b.id = `t-${n}`;
             x.appendChild(a);
         };
+    btn.onclick = strt;
     c.onfocus = p;
     nt();
-    d.addEventListener("click", (e) => {
+    d.onclick = (e) => {
         let t = e.target.closest(".k");
         if(!t) {
             let a = [...x.children];
@@ -211,7 +213,7 @@
             })
             a = [...x.children];
             a.forEach((t, i) => {
-                t.id = `tsk-${i + 1}`;
+                t.id = `t-${i + 1}`;
                 t.querySelector(".ht").innerHTML = `Task #${i + 1}`;
             })
             if (a.length < 5 && a.every(t => t.querySelector(".d").value)) nt();
@@ -219,5 +221,5 @@
         if (!e.target.closest("#h") && !h.contains("hid") && !e.target.closest("#t-h")) {
             h.add("hid");
         }
-    });
+    };
 </script>
