@@ -12,12 +12,18 @@
                 <input class="tsk-todo" name="txt" type="text" placeholder="What are you working on?">
             </div>
         </template>
+        <button type="button" id="toggle-help" onclick="toggle_help()">?</button>
         <div id="content">
             <div id="countdown-ctnr">
                 <input type="text" id="countdown" value="30:00" placeholder="MM:SS"></input>
                 <button id="toggle" type="button" onclick="start_counting()">START</button>
             </div>
             <div id="tsks-ctnr"></div>
+        </div>
+        <div id="help" class="hidden">
+            <h1>Pomodoro 101</h1>
+            <p>Set the timer value by clicking on the timer and entering the time in a MM:SS format. Add up to five tasks by simply clicking and writing</p>
+            <p>Thanks for using this lil' pomodoro by <a target="_blank" href="https://www.github.com/agilfor">agilfor</a>!</p>
         </div>
 
         <style>
@@ -43,6 +49,8 @@
 
             body {
                 display: flex;
+                margin: 0;
+                padding: 0;
                 justify-content: center;
                 flex-direction: row;
                 width: 100vw;
@@ -64,6 +72,7 @@
                 flex-direction: column;
                 color: #DFD0B8;
                 width: 30vw;
+                min-width: 450px;
                 height: max-content;
                 text-align: center;
                 background-color: #222831;
@@ -109,6 +118,9 @@
 
             #tsks-ctnr {
                 width: 30vw;
+                min-width: 450px;
+                overflow-y: scroll;
+                box-shadow: inset 0 0 5px 2px #393E46;
                 .task {
                     border: solid 2px #948979;
                     border-radius: 10px;
@@ -138,8 +150,71 @@
                 }
             }
 
+            #toggle-help {
+                position: fixed;
+                top: 10px; right: 10px;
+                background-color: transparent;
+                border: solid 2px #DFD0B8;
+                border-radius: 5px;
+                color: #DFD0B8;
+                font-weight: bold;
+            }
+            #toggle-help:hover {
+                background-color: #DFD0B8;
+                color: #222831;
+                cursor: pointer;
+            }
+            #toggle-help:active {
+                background-color: #948979;
+                border-color: #948979;
+            }
+            
+            #help {
+                opacity: 0.95;
+                position: fixed;
+                top: 10px;
+                text-align: center;
+                align-content: center;
+                align-items: center;
+                color: #DFD0B8;
+                height: min-content;
+                width: 30vw;
+                min-width: 450px;
+                background: #222831;
+                border: 2px solid #948979;
+                border-radius: 20px;
+                margin: 10px;
+                transition: top 0.5s ease;
+                box-shadow: 0 0 20px 10px #393E46;
+                h1 {
+                    padding: 10px 0 0 0;
+                    margin: 0;
+                    font-size: 30px;
+                }
+                p {
+                    padding: 0 20px;
+                }
+                a {
+                    color: #948979;
+                }
+                a:hover {
+                    color: #DFD0B8;
+                }
+            }
+            .hidden {
+                position: fixed;
+                top: -200px !important;
+            }
         </style>
         <script>
+            const help = document.getElementById("help");
+            const toggle_help = () => {
+                if (help.classList.contains("hidden")) {
+                    help.classList.remove("hidden");
+                } else {
+                    help.classList.add("hidden");
+                }
+            }
             // let notifs = false;
             // if (Notification.permission != "granted") {
             //     alert("Please allow notifications for when the timer is done :)");
@@ -241,6 +316,9 @@
                     }
                     if (need_regen) regenerate_tasks_list();
                     if (!tasks.includes("") && tasks.length < 5) new_task();
+                }
+                if (!event.target.closest("#help") && !help.classList.contains("hidden") && !event.target.closest("#toggle-help")) {
+                    help.classList.add("hidden");
                 }
             });
         </script>
