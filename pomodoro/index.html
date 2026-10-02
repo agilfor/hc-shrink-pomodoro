@@ -1,7 +1,7 @@
 <meta name=viewport content="width=device-width, initial-scale=1">
 <title>Pomodoro</title>
 <template id=tmp>
-    <div class=task>
+    <div class=k>
         <p class=ht></p>
         <input class=d placeholder="What are you working on?">
     </div>
@@ -16,7 +16,7 @@
 </div>
 <div id=h class=hid>
     <h1>pomodoro</h1>
-    <p>enter time in a MM:SS; type tasks in directly</p>
+    <p>enter time as MM:SS; type to add tasks</p>
     <p>made w &lt;3 by <a target="_blank" href="https://www.github.com/agilfor">agilfor</a></p>
 </div>
 <style>
@@ -37,14 +37,11 @@
 
     body {
         margin: 0;
-        width: 100vw;
-        height: 100vh;
         background: #393E46;
     }
 
     #m {
         flex-direction: column;
-        width: fit-content;
         height: 100vh;
     }
 
@@ -57,7 +54,7 @@
 
     #c-ctnr,
     #h,
-    .task {
+    .k {
         background: #222831;
         border: 2px solid #948979;
         border-radius: 20px;
@@ -74,7 +71,7 @@
             background: none;
             border: 0;
             margin: 20px 20px 0;
-            padding: 10px 10px 30px;
+            padding: 10px 10px;
             font-size: 120px;
             outline: 0;
             font-weight: bold;
@@ -92,7 +89,7 @@
     #tc {
         overflow-y: scroll;
 
-        .task {
+        .k {
             margin: 0 0 10px;
 
             p {
@@ -110,10 +107,6 @@
                 font-size: 15px;
                 width: calc(100% - 20px);
             }
-        }
-
-        .empty {
-            opacity: .75;
         }
     }
 
@@ -143,6 +136,7 @@
 
     #h {
         position: fixed;
+        top: 0;
         align-content: center;
         margin: 10px;
         padding: 10px 20px;
@@ -166,58 +160,51 @@
 </style>
 <script>
     const d = document,
-        h = d.getElementById("h"),
-        th = () => h.classList.toggle("hid"),
+        h = d.getElementById("h").classList,
+        th = () => h.toggle("hid"),
         c = d.getElementById("c"),
         btn = d.getElementById("o"),
         tmp = d.getElementById("tmp"),
-        x = d.getElementById("tc");
+        x = d.getElementById("tc"),
+        cl = clearInterval;
     let s, clk;
-    const convert = (n) => {
-        n = String(n);
-        if (n.length == 1) { n = "0" + n; }
-        return n;
-    },
-        pt = () => {
-            const time = c.value.split(":");
-            if (time.length != 2) {
-                alert("Enter time as MM:SS");
-                return -1;
+    const pt = () => {
+            const a = c.value.split(":");
+            if (a.length != 2) {
+                return alert("Enter time as MM:SS");
             }
-            return 60 * parseInt(time[0]) + parseInt(time[1]);
+            return 60 * parseInt(a[0]) + parseInt(a[1]);;
         },
         strt = () => {
             s = pt();
-            if (s <= 0) { return; }
+            if (!s) { return; }
             btn.innerHTML = "PAUSE";
             btn.onclick = p;
             clk = setInterval(() => {
                 s--;
                 let a = Math.floor(s / 60), b = s - a * 60;
-                c.value = `${convert(a)}:${convert(b)}`;
+                c.value = `${String(a).padStart(2, "0")}:${String(b).padStart(2, "0")}`;
                 if (s == 0) {
-                    clearInterval(clk);
+                    cl(clk);
                 }
             }, 1000);
         },
         p = () => {
-            clearInterval(clk);
+            cl(clk);
             btn.innerHTML = "START";
             btn.onclick = strt;
         },
         nt = () => {
-            let a = tmp.content.cloneNode(true), b = a.querySelector("div.task"), n = x.childElementCount + 1;
-            b.querySelector("p.ht").innerHTML = `Task #${n}`;
-            b.classList.add("empty");
+            let a = tmp.content.cloneNode(true), b = a.querySelector(".k"), n = x.childElementCount + 1;
+            b.querySelector(".ht").innerHTML = `Task #${n}`;
             b.id = `tsk-${n}`;
             x.appendChild(a);
         };
     c.onfocus = p;
     nt();
     d.addEventListener("click", (e) => {
-        let t = e.target.closest(".task");
-        if (t) t.classList.remove("empty");
-        else {
+        let t = e.target.closest(".k");
+        if(!t) {
             let a = [...x.children];
             a.forEach((t, i) => {
                 if (!t.querySelector(".d").value && i < a.length - 1) t.remove();
@@ -229,8 +216,8 @@
             })
             if (a.length < 5 && a.every(t => t.querySelector(".d").value)) nt();
         }
-        if (!e.target.closest("#h") && !h.classList.contains("hid") && !e.target.closest("#t-h")) {
-            h.classList.add("hid");
+        if (!e.target.closest("#h") && !h.contains("hid") && !e.target.closest("#t-h")) {
+            h.add("hid");
         }
     });
 </script>
